@@ -2,7 +2,7 @@
 
 </script>
 <template>
-  <div>
+  <div style="height: 1200px">
     this is home page
   </div>
 </template>
