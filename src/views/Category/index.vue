@@ -3,8 +3,7 @@
 </script>
 <template>
   <div>
-
-    this is about page
+    我是分类页面
   </div>
 </template>
 <style lang="" scoped>

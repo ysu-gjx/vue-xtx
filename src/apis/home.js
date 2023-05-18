@@ -15,4 +15,7 @@ export const getHotAPI = () => {
   return axios.get('/home/hot')
 }
 
-export const a = () => {}
+// 获取产品列表数据
+export const getGoodsAPI = () => {
+  return axios.get('/home/goods')
+}
