@@ -2,8 +2,8 @@
 
 </script>
 <template>
-  <div style="height: 1200px">
-    this is home page
+  <div>
+    我是 remen
   </div>
 </template>
 <style lang="" scoped>
