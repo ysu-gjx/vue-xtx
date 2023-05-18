@@ -1,8 +1,19 @@
 import axios from '@/utils/http'
 
-// 获取banner
-export const getBannerAPI = () => {
-  return axios.get('/home/banner')
+/**
+ *
+ * @description 获取banner
+ * @param {*} distributionSite  1表示首页轮播图 2表示分类商品页，默认是1
+ * @returns
+ */
+export const getBannerAPI = (params = {}) => {
+  // distributionSite 默认是1
+  const { distributionSite = '1' } = params
+  return axios.get('/home/banner', {
+    params: {
+      distributionSite
+    }
+  })
 }
 
 // 获取新鲜好物
