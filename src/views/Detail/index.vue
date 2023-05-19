@@ -1,5 +1,6 @@
 <script setup>
-import { getGoodsDetailAPI } from '@/apis/goods'
+import DetailHot from './components/DetailHot.vue';
+import { getGoodsDetailAPI } from '@/apis/detail'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -11,6 +12,7 @@ const getGoodsDetail = async () => {
   const res = await getGoodsDetailAPI(route.params.id)
   goods.value = res.result
 }
+
 
 onMounted(() => {
   getGoodsDetail()
@@ -125,7 +127,10 @@ onMounted(() => {
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-
+              <!-- 24小时 -->
+              <DetailHot />
+              <!-- 周热榜 -->
+              <DetailHot :hot-type="2" />
             </div>
           </div>
         </div>
