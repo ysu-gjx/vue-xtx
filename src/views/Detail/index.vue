@@ -1,5 +1,6 @@
 <script setup>
 import DetailHot from './components/DetailHot.vue';
+import ImageView from '@/components/ImageView/index.vue'
 import { getGoodsDetailAPI } from '@/apis/detail'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -7,7 +8,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 const goods = ref({})
-// const { }
+
 const getGoodsDetail = async () => {
   const res = await getGoodsDetailAPI(route.params.id)
   goods.value = res.result
@@ -44,6 +45,7 @@ onMounted(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
+              <ImageView :image-list="goods.mainPictures" />
 
               <!-- 统计数量 -->
               <ul class="goods-sales">
