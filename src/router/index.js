@@ -6,6 +6,7 @@ const Login = () => import('@/views/Login/index.vue')
 const Category = () => import('@/views/Category/index.vue')
 const SubCategory = () => import('@/views/SubCategory/index.vue')
 const Detail = () => import('@/views/Detail/index.vue')
+const CartList = () => import('@/views/CartList/index.vue')
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
         path: 'detail/:id',
         name: 'detail',
         component: Detail
+      },
+      {
+        path: 'cartlist',
+        name: 'cart-list',
+        component: CartList
       }
     ]
   },

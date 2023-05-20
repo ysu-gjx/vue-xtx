@@ -6,7 +6,6 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const confirm = () => {
-  console.log('111')
   // 退出登录业务逻辑实现
   // 1.清除用户信息 触发action
   userStore.clearUserInfo()

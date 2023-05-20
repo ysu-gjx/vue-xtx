@@ -1,12 +1,13 @@
 <script setup>
-import DetailHot from './components/DetailHot.vue';
-// import ImageView from '@/components/ImageView/index.vue'
-// import XtxSku from '@/components/XtxSku/index.vue'
+import DetailHot from './components/DetailHot.vue'
 import { getGoodsDetailAPI } from '@/apis/detail'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { useCartStore } from '@/stores/cart'
 
 const route = useRoute()
+const cartStore = useCartStore()
 
 const goods = ref({})
 
@@ -15,14 +16,39 @@ const getGoodsDetail = async () => {
   goods.value = res.result
 }
 
-const skuChange = (c) => {
-  console.log(c)
+let skuObj = {}
+const skuChange = (sku) => {
+  skuObj = sku
+}
+
+const count = ref(1)
+const countChange = (count) => {
+  console.log(count)
+}
+
+const addToCart = () => {
+  if (skuObj.skuId) {
+    cartStore.addToCart({
+      id: goods.value.id,
+      name: goods.value.name,
+      picture: goods.value.mainPictures[0],
+      price: goods.value.price,
+      count: count.value,
+      skuId: skuObj.skuId,
+      attrsText: skuObj.specsText,
+      selected: true
+    })
+  } else {
+    ElMessage({
+      type: 'warning',
+      message: '请选择规格'
+    })
+  }
 }
 
 onMounted(() => {
   getGoodsDetail()
 })
-
 </script>
 <template>
   <div class="xtx-goods-page">
@@ -35,10 +61,11 @@ onMounted(() => {
             1. 可选链的语法?. 
             2. v-if手动控制渲染时机 保证只有数据存在才渲染
            -->
-          <el-breadcrumb-item :to="{ path: `/category/${goods.categories?.[1].id}` }">{{ goods.categories?.[1].name }}
+          <el-breadcrumb-item :to="{ path: `/category/${goods.categories?.[1].id}` }"
+            >{{ goods.categories?.[1].name }}
           </el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/sub/${goods.categories?.[0].id}` }">{{ goods.categories?.[0].name
-          }}
+          <el-breadcrumb-item :to="{ path: `/category/sub/${goods.categories?.[0].id}` }"
+            >{{ goods.categories?.[0].name }}
           </el-breadcrumb-item>
           <el-breadcrumb-item>{{ goods.name }}</el-breadcrumb-item>
         </el-breadcrumb>
@@ -55,18 +82,18 @@ onMounted(() => {
               <ul class="goods-sales">
                 <li>
                   <p>销量人气</p>
-                  <p> {{ goods.salesCount <= 100 ? goods.salesCount : "100+" }} </p>
-                      <p><i class="iconfont icon-task-filling"></i>销量人气</p>
+                  <p>{{ goods.salesCount <= 100 ? goods.salesCount : '100+' }}</p>
+                  <p><i class="iconfont icon-task-filling"></i>销量人气</p>
                 </li>
                 <li>
                   <p>商品评价</p>
                   <p>{{ goods.commentCount <= 200 ? goods.commentCount : '200+' }}</p>
-                      <p><i class="iconfont icon-comment-filling"></i>查看评价</p>
+                  <p><i class="iconfont icon-comment-filling"></i>查看评价</p>
                 </li>
                 <li>
                   <p>收藏人气</p>
                   <p>{{ goods.collectCount <= 300 ? goods.collectCount : '300+' }}</p>
-                      <p><i class="iconfont icon-favorite-filling"></i>收藏商品</p>
+                  <p><i class="iconfont icon-favorite-filling"></i>收藏商品</p>
                 </li>
                 <li>
                   <p>品牌信息</p>
@@ -77,8 +104,8 @@ onMounted(() => {
             </div>
             <div class="spec">
               <!-- 商品信息区 -->
-              <p class="g-name"> {{ goods.name }} </p>
-              <p class="g-desc">{{ goods.desc }} </p>
+              <p class="g-name">{{ goods.name }}</p>
+              <p class="g-desc">{{ goods.desc }}</p>
               <p class="g-price">
                 <span>{{ goods.price }}</span>
                 <span> {{ goods.oldPrice }}</span>
@@ -102,14 +129,12 @@ onMounted(() => {
               <XtxSku :goods="goods" @change="skuChange" />
 
               <!-- 数据组件 -->
+              <el-input-number v-model="count" :min="1" @change="countChange" />
 
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn">
-                  加入购物车
-                </el-button>
+                <el-button size="large" class="btn" @click="addToCart"> 加入购物车 </el-button>
               </div>
-
             </div>
           </div>
           <div class="goods-footer">
@@ -128,7 +153,7 @@ onMounted(() => {
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="img in goods.details.pictures" v-img-lazy="img" :key="img" alt="">
+                  <img v-for="img in goods.details.pictures" v-img-lazy="img" :key="img" alt="" />
                 </div>
               </div>
             </div>
@@ -215,7 +240,7 @@ onMounted(() => {
 
     span {
       &::before {
-        content: "¥";
+        content: '¥';
         font-size: 14px;
       }
 
@@ -257,7 +282,7 @@ onMounted(() => {
             margin-right: 10px;
 
             &::before {
-              content: "•";
+              content: '•';
               color: $xtxColor;
               margin-right: 2px;
             }
@@ -282,13 +307,13 @@ onMounted(() => {
       flex: 1;
       position: relative;
 
-      ~li::after {
+      ~ li::after {
         position: absolute;
         top: 10px;
         left: 0;
         height: 60px;
         border-left: 1px solid #e4e4e4;
-        content: "";
+        content: '';
       }
 
       p {
@@ -336,7 +361,7 @@ onMounted(() => {
       font-size: 18px;
       position: relative;
 
-      >span {
+      > span {
         color: $priceColor;
         font-size: 16px;
         margin-left: 10px;
@@ -370,14 +395,13 @@ onMounted(() => {
     }
   }
 
-  >img {
+  > img {
     width: 100%;
   }
 }
 
 .btn {
   margin-top: 20px;
-
 }
 
 .bread-container {
