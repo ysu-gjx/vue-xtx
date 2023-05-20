@@ -1,12 +1,21 @@
 <script setup>
 import { useCartStore } from '@/stores/cart'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
 const cartStore = useCartStore()
-const { cartList } = storeToRefs(cartStore)
+const { cartList, isCheckAll, selectedPrice, selectedCount, totalCount } = storeToRefs(cartStore)
 
-const singleChange = (selected) => {
-  console.log(selected)
+const singleCheck = (goods, selected) => {
+  cartStore.singleCheck(goods.skuId, selected)
+}
+
+const isIndeterminate = computed(
+  () => !isCheckAll.value && cartList.value.some((item) => item.selected)
+)
+
+const handleCheckAll = (selected) => {
+  cartStore.checkAll(selected)
 }
 </script>
 <template>
@@ -17,7 +26,11 @@ const singleChange = (selected) => {
           <thead>
             <tr>
               <th width="120">
-                <el-checkbox />
+                <el-checkbox
+                  :indeterminate="isIndeterminate"
+                  :model-value="isCheckAll"
+                  @change="handleCheckAll"
+                />
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>
@@ -30,7 +43,11 @@ const singleChange = (selected) => {
           <tbody>
             <tr v-for="i in cartList" :key="i.id">
               <td>
-                <el-checkbox :model-value="i.selected" @change="singleChange" />
+                <!-- !这个绑定函数的方法很重要，没有直接绑定函数名，而是通过箭头函数，扩展参数 -->
+                <el-checkbox
+                  :model-value="i.selected"
+                  @change="(selected) => singleCheck(i, selected)"
+                />
               </td>
               <td>
                 <div class="goods">
@@ -81,8 +98,8 @@ const singleChange = (selected) => {
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          共 10 件商品，已选择 2 件，商品合计：
-          <span class="red">¥ 200.00 </span>
+          共 {{ totalCount }} 件商品，已选择 {{ selectedCount }} 件，商品合计：
+          <span class="red">¥ {{ selectedPrice.toFixed(2) }} </span>
         </div>
         <div class="total">
           <el-button size="large" type="primary">下单结算</el-button>

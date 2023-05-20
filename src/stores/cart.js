@@ -34,19 +34,45 @@ export const useCartStore = defineStore(
       cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
     }
 
+    // 单选功能
+    const singleCheck = (skuId, selected) => {
+      const cur = cartList.value.find((item) => item.skuId === skuId)
+      cur.selected = selected
+    }
+
+    // 全选功能
+    const checkAll = (selected) => {
+      cartList.value.forEach((item) => (item.selected = selected))
+    }
+
     // getters 总数量
     const totalCount = computed(() => cartList.value.reduce((acc, cur) => acc + cur.count, 0))
     // getters 总价
     const totalPrice = computed(() =>
       cartList.value.reduce((acc, cur) => acc + cur.count * cur.price, 0)
     )
+    // 已选择的数量
+    const selectedCount = computed(() =>
+      cartList.value.filter((t) => t.selected).reduce((acc, cur) => acc + cur.count, 0)
+    )
+    // 已选择的价格和
+    const selectedPrice = computed(() =>
+      cartList.value.filter((t) => t.selected).reduce((acc, cur) => acc + cur.count * cur.price, 0)
+    )
+    // getter 是否全选
+    const isCheckAll = computed(() => cartList.value.every((item) => item.selected))
 
     return {
       cartList,
       totalPrice,
       totalCount,
+      isCheckAll,
+      selectedCount,
+      selectedPrice,
       addToCart,
-      delCart
+      delCart,
+      singleCheck,
+      checkAll
     }
   },
   { persist: true }
