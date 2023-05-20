@@ -1,25 +1,26 @@
 <script setup>
 import { useScroll } from '@vueuse/core'
-import { useCategoryStore } from '@/stores/category';
+import { useCategoryStore } from '@/stores/categoryStore'
 import { storeToRefs } from 'pinia'
 
 const { y } = useScroll(window)
 
 const categoryStore = useCategoryStore()
 const { categoryList } = storeToRefs(categoryStore)
-
 </script>
 <template>
   <div class="app-header-sticky" :class="{ show: y > 78 }">
     <div class="container">
       <RouterLink class="logo" to="/" />
       <!-- 导航区域 -->
-      <ul class="app-header-nav ">
+      <ul class="app-header-nav">
         <li class="home">
           <RouterLink to="/">首页</RouterLink>
         </li>
         <li v-for="item in categoryList" :key="item.id">
-          <RouterLink active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+          <RouterLink active-class="active" :to="`/category/${item.id}`">{{
+            item.name
+          }}</RouterLink>
         </li>
       </ul>
 
@@ -60,7 +61,7 @@ const { categoryList } = storeToRefs(categoryStore)
   .logo {
     width: 200px;
     height: 80px;
-    background: url("@/assets/images/logo.png") no-repeat right 2px;
+    background: url('@/assets/images/logo.png') no-repeat right 2px;
     background-size: 160px auto;
   }
 
