@@ -120,6 +120,7 @@ export const useCartStore = defineStore(
       singleCheck,
       checkAll,
       clearCart,
+      updateNewList,
       mergeCart
     }
   },
