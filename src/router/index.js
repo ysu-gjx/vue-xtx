@@ -10,6 +10,9 @@ const CartList = () => import('@/views/CartList/index.vue')
 const Checkout = () => import('@/views/Checkout/index.vue')
 const Pay = () => import('@/views/Pay/index.vue')
 const PayBack = () => import('@/views/Pay/PayBack.vue')
+const Member = () => import('@/views/Member/index.vue')
+const UserInfo = () => import('@/views/Member/components/UserInfo.vue')
+const UserOrder = () => import('@/views/Member/components/UserOrder.vue')
 
 const routes = [
   {
@@ -50,6 +53,23 @@ const routes = [
         },
         name: 'pay',
         component: Pay
+      },
+      {
+        path: 'member',
+        name: 'member',
+        component: Member,
+        children: [
+          {
+            path: '',
+            name: 'user',
+            component: UserInfo
+          },
+          {
+            path: 'order',
+            name: 'order',
+            component: UserOrder
+          }
+        ]
       }
     ]
   },
