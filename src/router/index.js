@@ -14,6 +14,9 @@ const Member = () => import('@/views/Member/index.vue')
 const UserInfo = () => import('@/views/Member/components/UserInfo.vue')
 const UserOrder = () => import('@/views/Member/components/UserOrder.vue')
 
+// sku 组件
+const SKU = () => import('@/components/TestSku/index.vue')
+
 const routes = [
   {
     path: '/',
@@ -78,6 +81,11 @@ const routes = [
     path: '/paycallback',
     name: 'paycallback',
     component: PayBack
+  },
+  {
+    path: '/sku',
+    name: 'sku',
+    component: SKU
   }
 ]
 
